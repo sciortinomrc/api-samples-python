@@ -97,7 +97,11 @@ def _loadLicenses(args):
     except:
         result = TIMEOUT
  
-    return json.loads(result.text)
+    if result.status_code != 200:
+        print 'Unable to succesfully contact the meterian server: %s' % str(result)
+        return None
+    else:
+        return json.loads(result.text)
 
 
 
@@ -125,10 +129,11 @@ if __name__ == '__main__':
     print 'Looking for license information about "%s" version "%s" in the "%s" space...' % (args.name, args.version, args.language)
     licenses = _loadLicenses(args)
     
-    print 'Found %d license(s):' % len(licenses)
-    for licenz in licenses:
-        print '- id:   ' + licenz["id"]
-        print '  name: ' + licenz["name"]
-        print '  uri:  ' + licenz["uri"]
+    if licenses != None:
+        print 'Found %d license(s):' % len(licenses)
+        for licenz in licenses:
+            print '- id:   ' + licenz["id"]
+            print '  name: ' + licenz["name"]
+            print '  uri:  ' + licenz["uri"]
         
 
