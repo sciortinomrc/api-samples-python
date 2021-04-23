@@ -40,13 +40,13 @@ Asking for **nodejs** library, **less**, version **3.11.3**
       name: Apache License 2.0
       uri:  https://spdx.org/licenses/Apache-2.0.html
 
-## vulnerability&#46;py
+## vulninfo&#46;py
 This script allows you to list information regarding a specific vulnerability across Meterian curated advisories databases (php, nvd, gha). Simply specify the latter database and the unique identifer for a given vulnerability and the tool will fetch relevant information about it.
 
 Asking for vulnerability **CVE-2020-9483** from the **nvd** database
 
 ```bash
-    $ ./vulnerability.py nvd CVE-2020-9483
+    $ ./vulninfo.py nvd CVE-2020-9483
     Fetching information for vulnerability "CVE-2020-9483" from the "nvd" database...
     - id:   2a595267-7807-3278-87d9-79829e90b62e
       - library:

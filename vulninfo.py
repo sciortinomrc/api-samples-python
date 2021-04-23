@@ -97,7 +97,10 @@ def _loadVulnerability(args):
     except:
         result = TIMEOUT
 
-    if result.status_code != 200:
+    if result.status_code == 404:
+        print 'No matching vulnerability was found'
+        return None
+    elif result.status_code != 200:
         print 'Unable to successfully contact the meterian server: %s' % str(result)
         return None
     else:
@@ -130,28 +133,32 @@ if __name__ == '__main__':
     vuln = _loadVulnerability(args)
 
     if vuln != None:
-        print '- id:   ' + vuln["id"]
-        print '  - library:'
-        print '    language: ' + vuln["library"]["language"]
-        print '    name: ' + vuln["library"]["name"]
-        print '  version range: ' + vuln["versionRange"]
-        print '  severity: ' + vuln["severity"]
+        if str(args.db) == "nvd-me" or str(args.db) == "nvd-raw":
+            print
+            print(json.dumps(vuln, indent=4, sort_keys=True))
+        else:
+            print '- id:   ' + vuln["id"]
+            print '  - library:'
+            print '    language: ' + vuln["library"]["language"]
+            print '    name: ' + vuln["library"]["name"]
+            print '  version range: ' + vuln["versionRange"]
+            print '  severity: ' + vuln["severity"]
 
-        if len(vuln["links"]) > 0:
-            print '  - links: '
-            for link in vuln["links"]:
-                if link["url"].startswith("http"):
-                    print '    ' + link["url"]
+            if len(vuln["links"]) > 0:
+                print '  - links: '
+                for link in vuln["links"]:
+                    if link["url"].startswith("http"):
+                        print '    ' + link["url"]
 
-        print '  source: ' + vuln["source"]
-        print '  type: ' + vuln["type"]
-        print '  cwe: ' + vuln["cwe"]
-        print '  cvss: ' + str(vuln["cvss"])
-        print '  active: ' + str(vuln["active"])
+            print '  source: ' + vuln["source"]
+            print '  type: ' + vuln["type"]
+            print '  cwe: ' + vuln["cwe"]
+            print '  cvss: ' + str(vuln["cvss"])
+            print '  active: ' + str(vuln["active"])
 
-        if len(vuln["fixedVersions"]) > 0:
-            print '  - fixed versions: '
-            for fixedVer in vuln["fixedVersions"]:
-                print '    ' + fixedVer
+            if len(vuln["fixedVersions"]) > 0:
+                print '  - fixed versions: '
+                for fixedVer in vuln["fixedVersions"]:
+                    print '    ' + fixedVer
 
-        print '  description: ' + vuln["description"]
+            print '  description: ' + vuln["description"]
