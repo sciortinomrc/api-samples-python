@@ -64,6 +64,35 @@ Asking for vulnerability **CVE-2020-9483** from the **nvd** database
       description: **Resolved** When use H2/MySQL/TiDB as Apache SkyWalking storage, the metadata query through GraphQL protocol, there is a SQL injection vulnerability, which allows to access unpexcted data. Apache SkyWalking 6.0.0 to 6.6.0, 7.0.0 H2/MySQL/TiDB storage implementations don't use the appropriate way to set SQL parameters.
 ```
 
+## advisories&#46;py
+This script allows to list the advisories of associated to a given library. After specifying the language, the full name fo the library and its version, the tool will fetch all the related advisories it can find.
+
+Asking for **dotnet** library, **System.Text.RegularExpressions**, version **4.3.0**
+
+```bash
+    $ ./advisories.py dotnet System.Text.RegularExpressions 4.3.0
+    Looking for advisories for "System.Text.RegularExpressions" version "4.3.0" in the "dotnet" space...
+    Found 1 advisories:
+    - id:   3fbb34a8-ee91-4774-a059-d5452b79d159
+      - library:
+        language: dotnet
+        name: system.text.regularexpressions
+      version range: [4.3.0,4.3.1)
+      severity: HIGH
+      - links: 
+        https://portal.msrc.microsoft.com/en-US/security-guidance/advisory/CVE-2019-0820
+        https://github.com/dotnet/core/blob/master/release-notes/2.2/2.2.5/2.2.5.md
+      source: METERIAN
+      type: SECURITY
+      cwe: CWE-400
+      cvss: 7.5
+      active: False
+      - fixed in versions: 
+        4.3.1
+      description: A denial of service vulnerability exists when .NET Core improperly process RegEx strings. An attacker who successfully exploited this vulnerability could cause a denial of service against a .NET application. A remote unauthenticated attacker could exploit this vulnerability by issuing specially crafted requests to a .NET Core application.
+
+```
+
 ## Help
 If in need of help issue the `--help` flag (all the listed tools support it).
 
