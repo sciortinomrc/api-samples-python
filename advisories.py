@@ -13,7 +13,7 @@ API_TOKEN_ENVVAR = 'METERIAN_API_TOKEN'
 
 TIMEOUT = namedtuple('literal', 'text status_code')(text='{"status":"timeout"}', status_code=999)
 
-LANGUAGES = [ 'java', 'javascript', 'nodejs', 'python', 'dotnet', 'ruby', 'scala', 'php', 'swift', 'golang']
+LANGUAGES = [ 'java', 'javascript', 'nodejs', 'python', 'dotnet', 'ruby', 'scala', 'php', 'swift', 'golang', 'rust']
 
 
 class HelpingParser(argparse.ArgumentParser):
@@ -105,6 +105,17 @@ def _loadAdvisories(args):
         return json.loads(result.text)
 
 
+def _getExternalVulnUrl(linkObj):
+    maybeUrl = linkObj["url"]
+    if maybeUrl.startswith("https") or maybeUrl.startswith("http"):
+        return maybeUrl
+    if linkObj["type"] == "CVE":
+        return "https://cve.mitre.org/cgi-bin/cvename.cgi?name=" + linkObj["cve"]
+    if linkObj["type"] == "NVD":
+        return "https://nvd.nist.gov/vuln/detail/" + linkObj["cve"]
+
+    return None
+
 
 #
 # CLI entry point
@@ -131,33 +142,41 @@ if __name__ == '__main__':
     advisories = _loadAdvisories(args)
 
     if advisories != None:
-        print 'Found %d advisories:' % len(advisories)
+        print 'Found %d %s:' % (len(advisories), "advisories" if len(advisories) != 1 else "advisory")
         for advisory in advisories:
-            print '- id:   ' + advisory["id"]
-            print '  - library:'
-            print '    language: ' + advisory["library"]["language"]
-            print '    name: ' + advisory["library"]["name"]
-            print '  version range: ' + advisory["versionRange"]
-            print '  severity: ' + advisory["severity"]
+            print '- id:                  ' + advisory["id"]
+            print '  library:             ' + advisory["library"]["name"]
+            print '  language:            ' + advisory["library"]["language"]
+            print '  version range:       ' + advisory["versionRange"]
+            print '  severity:            ' + advisory["severity"]
 
             if len(advisory["links"]) > 0:
-                print '  - links: '
+                initialLinkStr = '  links:               '
+                linksStr = initialLinkStr
                 for link in advisory["links"]:
-                    if link["url"].startswith("http"):
-                        print '    ' + link["url"]
+                    url = _getExternalVulnUrl(link)
+                    if url != None:
+                        if linksStr == initialLinkStr:
+                            linksStr += url + '\n'
+                        else:
+                            linksStr += '                       ' + url + '\n'
+                if linksStr != initialLinkStr:
+                    print linksStr
 
-            print '  source: ' + advisory["source"]
-            print '  type: ' + advisory["type"]
+            print '  source:              ' + advisory["source"]
+            print '  type:                ' + advisory["type"]
 
             if advisory["cwe"] != None:
-                print '  cwe: ' + advisory["cwe"]
+                print '  cwe:                 ' + advisory["cwe"]
             
-            print '  cvss: ' + str(advisory["cvss"])
-            print '  active: ' + str(advisory["active"])
+            print '  cvss:                ' + str(advisory["cvss"])
+            print '  active:              ' + str(advisory["active"])
 
             if len(advisory["fixedInVersions"]) > 0:
-                print '  - fixed in versions: '
+                fixVerStr = '  fixed in version(s): ['
                 for fixedVer in advisory["fixedInVersions"]:
-                    print '    ' + fixedVer
+                    fixVerStr += fixedVer + ', '
+                fixVerStr = fixVerStr[:-2] + ']'
+                print fixVerStr
 
-            print '  description: ' + advisory["description"]
+            print '  description:         ' + advisory["description"]
