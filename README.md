@@ -46,22 +46,23 @@ This script allows you to list information regarding a specific vulnerability ac
 Asking for vulnerability **CVE-2020-9483** from the **nvd** database
 
 ```bash
-    $ ./vulninfo.py nvd CVE-2020-9483
-    Fetching information for vulnerability "CVE-2020-9483" from the "nvd" database...
-    - id:   2a595267-7807-3278-87d9-79829e90b62e
-      - library:
-        language: java
-        name: org.apache.skywalking:apm
-      version range: [6.0.0,6.6.0]|7.0.0
-      severity: HIGH
-      - links: 
-        https://github.com/apache/skywalking/pull/4639
-      source: NVD
-      type: SECURITY
-      cwe: CWE-89
-      cvss: 7.5
-      active: True
-      description: **Resolved** When use H2/MySQL/TiDB as Apache SkyWalking storage, the metadata query through GraphQL protocol, there is a SQL injection vulnerability, which allows to access unpexcted data. Apache SkyWalking 6.0.0 to 6.6.0, 7.0.0 H2/MySQL/TiDB storage implementations don't use the appropriate way to set SQL parameters.
+$ ./vulninfo.py nvd CVE-2020-9483
+Fetching information for vulnerability "CVE-2020-9483" from the "java" database...
+- id:               d192e5ad-5948-4bd8-8d00-3c05e83abd17
+  library:          org.apache.skywalking:server-storage-plugin
+  language:         java
+  version range:    [6.0.0,8.0.0)
+  severity:         MEDIUM
+  links:            https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-9483
+                    https://nvd.nist.gov/vuln/detail/CVE-2020-9483
+                    https://github.com/apache/skywalking/pull/4639
+
+  source:           METERIAN
+  type:             SECURITY
+  cvss:             5
+  active:           False
+  fixed version(s): [8.0.0]
+  description:      **Resolved** When use H2/MySQL/TiDB as Apache SkyWalking storage, the metadata query through GraphQL protocol, there is a SQL injection vulnerability, which allows to access unpexcted data. Apache SkyWalking 6.0.0 to 6.6.0, 7.0.0 H2/MySQL/TiDB storage implementations don't use the appropriate way to set SQL parameters.
 ```
 
 ## advisories&#46;py
@@ -70,27 +71,26 @@ This script allows to list the advisories of associated to a given library. Afte
 Asking for **dotnet** library, **System.Text.RegularExpressions**, version **4.3.0**
 
 ```bash
-    $ ./advisories.py dotnet System.Text.RegularExpressions 4.3.0
-    Looking for advisories for "System.Text.RegularExpressions" version "4.3.0" in the "dotnet" space...
-    Found 1 advisories:
-    - id:   3fbb34a8-ee91-4774-a059-d5452b79d159
-      - library:
-        language: dotnet
-        name: system.text.regularexpressions
-      version range: [4.3.0,4.3.1)
-      severity: HIGH
-      - links: 
-        https://portal.msrc.microsoft.com/en-US/security-guidance/advisory/CVE-2019-0820
-        https://github.com/dotnet/core/blob/master/release-notes/2.2/2.2.5/2.2.5.md
-      source: METERIAN
-      type: SECURITY
-      cwe: CWE-400
-      cvss: 7.5
-      active: False
-      - fixed in versions: 
-        4.3.1
-      description: A denial of service vulnerability exists when .NET Core improperly process RegEx strings. An attacker who successfully exploited this vulnerability could cause a denial of service against a .NET application. A remote unauthenticated attacker could exploit this vulnerability by issuing specially crafted requests to a .NET Core application.
+$ ./advisories.py dotnet System.Text.RegularExpressions 4.3.0
+Looking for advisories for "System.Text.RegularExpressions" version "4.3.0" in the "dotnet" space...
+Found 1 advisory:
+- id:                  3fbb34a8-ee91-4774-a059-d5452b79d159
+  library:             system.text.regularexpressions
+  language:            dotnet
+  version range:       [4.3.0,4.3.1)
+  severity:            HIGH
+  links:               https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-0820
+                      https://nvd.nist.gov/vuln/detail/CVE-2019-0820
+                      https://portal.msrc.microsoft.com/en-US/security-guidance/advisory/CVE-2019-0820
+                      https://github.com/dotnet/core/blob/master/release-notes/2.2/2.2.5/2.2.5.md
 
+  source:              METERIAN
+  type:                SECURITY
+  cwe:                 CWE-400
+  cvss:                7.5
+  active:              False
+  fixed in version(s): [4.3.1]
+  description:         A denial of service vulnerability exists when .NET Core improperly process RegEx strings. An attacker who successfully exploited this vulnerability could cause a denial of service against a .NET application. A remote unauthenticated attacker could exploit this vulnerability by issuing specially crafted requests to a .NET Core application.
 ```
 
 ## Help

@@ -13,7 +13,7 @@ API_TOKEN_ENVVAR = 'METERIAN_API_TOKEN'
 
 TIMEOUT = namedtuple('literal', 'text status_code')(text='{"status":"timeout"}', status_code=999)
 
-DATABASES = [ 'all', 'php', 'nvd', 'gha', 'nvd-me', 'nvd-raw']
+DATABASES = [ 'all', 'java', 'javascript', 'nodejs', 'python', 'dotnet', 'ruby', 'scala', 'php', 'swift', 'golang', 'rust', 'nvd', 'gha', 'nvd-me', 'nvd-raw']
 
 
 class HelpingParser(argparse.ArgumentParser):
@@ -107,6 +107,17 @@ def _loadVulnerability(args):
         return json.loads(result.text)
 
 
+def _getExternalVulnUrl(linkObj):
+    maybeUrl = linkObj["url"]
+    if maybeUrl.startswith("https") or maybeUrl.startswith("http"):
+        return maybeUrl
+    if linkObj["type"] == "CVE":
+        return "https://cve.mitre.org/cgi-bin/cvename.cgi?name=" + maybeUrl
+    if linkObj["type"] == "NVD":
+        return "https://nvd.nist.gov/vuln/detail/" + maybeUrl
+
+    return None
+
 
 #
 # CLI entry point
@@ -137,28 +148,39 @@ if __name__ == '__main__':
             print
             print(json.dumps(vuln, indent=4, sort_keys=True))
         else:
-            print '- id:   ' + vuln["id"]
-            print '  - library:'
-            print '    language: ' + vuln["library"]["language"]
-            print '    name: ' + vuln["library"]["name"]
-            print '  version range: ' + vuln["versionRange"]
-            print '  severity: ' + vuln["severity"]
+            print '- id:               ' + vuln["id"]
+            print '  library:          ' + vuln["library"]["name"]
+            print '  language:         ' + vuln["library"]["language"]
+            print '  version range:    ' + vuln["versionRange"]
+            print '  severity:         ' + vuln["severity"]
 
             if len(vuln["links"]) > 0:
-                print '  - links: '
+                initialLinkStr = '  links:            '
+                linksStr = initialLinkStr
                 for link in vuln["links"]:
-                    if link["url"].startswith("http"):
-                        print '    ' + link["url"]
+                    url = _getExternalVulnUrl(link)
+                    if url != None:
+                        if linksStr == initialLinkStr:
+                            linksStr += url + '\n'
+                        else:
+                            linksStr += '                    ' + url + '\n'
+                if linksStr != initialLinkStr:
+                    print linksStr
 
-            print '  source: ' + vuln["source"]
-            print '  type: ' + vuln["type"]
-            print '  cwe: ' + vuln["cwe"]
-            print '  cvss: ' + str(vuln["cvss"])
-            print '  active: ' + str(vuln["active"])
+            print '  source:           ' + vuln["source"]
+            print '  type:             ' + vuln["type"]
+
+            if vuln.get("cwe") != None:
+                print '  cwe:              ' + vuln["cwe"]
+
+            print '  cvss:             ' + str(vuln["cvss"])
+            print '  active:           ' + str(vuln["active"])
 
             if len(vuln["fixedVersions"]) > 0:
-                print '  - fixed versions: '
+                fixVerStr = '  fixed version(s): ['
                 for fixedVer in vuln["fixedVersions"]:
-                    print '    ' + fixedVer
+                    fixVerStr += fixedVer + ', '
+                fixVerStr = fixVerStr[:-2] + ']'
+                print fixVerStr
 
-            print '  description: ' + vuln["description"]
+            print '  description:      ' + vuln["description"]
