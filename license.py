@@ -89,7 +89,7 @@ def _initLogging(args):
 
 def _loadLicenses(args):
 
-    url = 'https://www.meterian.com/api/v1/licenses/library/%s/%s/%s' % (args.language, args.name, args.version)
+    url = 'https://www.meterian.com/api/v1/licenses/library/%s/%s/%s' % (args.language, args.name.replace("/", "|"), args.version)
     logging.debug('Loading license info from url [%s]...', url)
 
     try:
