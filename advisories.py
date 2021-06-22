@@ -13,7 +13,7 @@ API_TOKEN_ENVVAR = 'METERIAN_API_TOKEN'
 
 TIMEOUT = namedtuple('literal', 'text status_code')(text='{"status":"timeout"}', status_code=999)
 
-LANGUAGES = [ 'java', 'javascript', 'nodejs', 'python', 'dotnet', 'ruby', 'scala', 'php', 'swift', 'golang', 'rust']
+LANGUAGES = [ 'java', 'javascript', 'nodejs', 'python', 'dotnet', 'ruby', 'scala', 'php', 'swift', 'golang', 'rust', 'erlang', "perl", "linux" ]
 
 
 class HelpingParser(argparse.ArgumentParser):
@@ -89,7 +89,7 @@ def _initLogging(args):
 
 def _loadAdvisories(args):
 
-    url = 'https://www.meterian.com/api/v1/dependency/%s/%s/%s' % (args.language, args.name, args.version)
+    url = 'https://www.meterian.com/api/v1/dependency/%s/%s/%s' % (args.language, args.name.replace("/", "|"), args.version)
     logging.debug('Loading advisories info from url [%s]...', url)
 
     try:
@@ -99,7 +99,7 @@ def _loadAdvisories(args):
         result = TIMEOUT
 
     if result.status_code != 200:
-        print 'Unable to succesfully contact the meterian server: %s' % str(result)
+        print 'Unable to successfully contact the meterian server: %s' % str(result)
         return None
     else:
         return json.loads(result.text)
