@@ -13,7 +13,7 @@ API_TOKEN_ENVVAR = 'METERIAN_API_TOKEN'
 
 TIMEOUT = namedtuple('literal', 'text status_code')(text='{"status":"timeout"}', status_code=999)
 
-DATABASES = [ 'all', 'java', 'javascript', 'nodejs', 'python', 'dotnet', 'ruby', 'scala', 'php', 'swift', 'golang', 'rust', 'earlang', 'perl', 'linux', 'nvd', 'gha', 'nvd-me', 'nvd-raw' ]
+DATABASES = [ 'all', 'java', 'javascript', 'nodejs', 'python', 'dotnet', 'ruby', 'scala', 'php', 'swift', 'golang', 'rust', 'erlang', 'perl', 'linux', 'nvd', 'gha', 'nvd-me', 'nvd-raw' ]
 
 
 class HelpingParser(argparse.ArgumentParser):
