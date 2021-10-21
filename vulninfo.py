@@ -13,7 +13,7 @@ API_TOKEN_ENVVAR = 'METERIAN_API_TOKEN'
 
 TIMEOUT = namedtuple('literal', 'text status_code')(text='{"status":"timeout"}', status_code=999)
 
-DATABASES = [ 'all', 'java', 'javascript', 'nodejs', 'python', 'dotnet', 'ruby', 'scala', 'php', 'swift', 'golang', 'rust', 'erlang', 'perl', 'linux', 'nvd', 'gha', 'nvd-me', 'nvd-raw' ]
+DATABASES = [ 'all', 'java', 'javascript', 'nodejs', 'python', 'dotnet', 'ruby', 'scala', 'php', 'swift', 'golang', 'rust', 'erlang', 'perl', 'linux', 'nvd', 'gha', 'nvd-me', 'nvd-raw', 'cwe  ', 'cpe' ]
 
 
 class HelpingParser(argparse.ArgumentParser):
@@ -144,7 +144,7 @@ if __name__ == '__main__':
     vuln = _loadVulnerability(args)
 
     if vuln != None:
-        if str(args.db) == "nvd-me" or str(args.db) == "nvd-raw":
+        if str(args.db) == "nvd-me" or str(args.db) == "nvd-raw" or str(args.db) == "cpe" or str(args.db) == "cwe":
             print
             print(json.dumps(vuln, indent=4, sort_keys=True))
         else:
