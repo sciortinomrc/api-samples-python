@@ -1,4 +1,5 @@
 # Python sample API scripts
+[![security status](https://qa.meterian.com/badge/pb/078ce957-e8d3-4e6e-beae-bb9cf566bc56/security)](https://qa.meterian.com/projects/?pid=078ce957-e8d3-4e6e-beae-bb9cf566bc56) [![stability status](https://qa.meterian.com/badge/pb/078ce957-e8d3-4e6e-beae-bb9cf566bc56/stability)](https://qa.meterian.com/projects/?pid=078ce957-e8d3-4e6e-beae-bb9cf566bc56) [![licensing status](https://qa.meterian.com/badge/pb/078ce957-e8d3-4e6e-beae-bb9cf566bc56/licensing)](https://qa.meterian.com/projects/?pid=078ce957-e8d3-4e6e-beae-bb9cf566bc56)
 A set of sample calls to the Meterian API in Python: use simple python scripts to leverage the power of the [Meterian API](http://api.meterian.io)
 
 ## You will need a token to use these tools!
